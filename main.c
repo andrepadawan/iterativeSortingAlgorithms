@@ -40,7 +40,7 @@ typedef struct {
 FILE *fp_read;
 
 void readFile(entry_t data[], int numEntries);
-void selectionSort();
+void selectionSort(entry_t *data, int numberOfEntries);
 void insertionSort();
 void shellSort();
 
@@ -56,6 +56,15 @@ int main() {
     entry_t data[numberOfEntries];
     readFile(data, numberOfEntries);
     fclose(fp_read);
+    for(int i = 0; i<numberOfEntries; i++){
+        for (int j = 0; j < data[i].lenght; ++j) {
+            printf("%d ", data[i].array[j]);
+        }
+        printf("\n");
+    }
+
+    selectionSort(data, numberOfEntries);
+
 }
 
 void readFile(entry_t data[], int numberOfEntries) {
@@ -64,8 +73,47 @@ void readFile(entry_t data[], int numberOfEntries) {
         fscanf(fp_read, "%d", &data[i].lenght);
             for (int j = 0; j < data[i].lenght; ++j) {
                 fscanf(fp_read, "%d", &data[i].array[j]);
-                printf("%d ", data[i].array[j]);
             }
-            printf("\n");
     }
+}
+
+
+void selectionSort(entry_t *data, int numEntries) {
+    /*RIPASSINO
+     * Il selection sort è un algoritmo in-place.
+     * Ad ogni iterazione, prende il valore minore della sequenza non ordinata e lo sposta nella sequenza ordinata.
+     * All'inizio la sequenza non ordinata ha lunghezza N-1; l'altra 0.
+     * Poi, una decrementa unitamente all'altra che incrementa (sempre di uno)
+     * */
+    printf("Selection sort:\n");
+    for (int i = 0; i < numEntries; i++) {//Cioé applico l'algoritmo per ogni array nel file
+        int posMin;
+        int temp;
+
+        for (int n = 0; n < data[i].lenght; n++) {
+            posMin = n; //Il primo elemento viene settato come minimo, a prescindere
+
+            for (int j = (n + 1); j < data[i].lenght; ++j) {
+                if (data[i].array[j] < data[i].array[posMin]) {
+                    //Ho trovato un nuovo minimo
+                    posMin = j;
+                }
+            }
+            if (posMin != n) { //li scambio
+                temp = data[i].array[n];
+                data[i].array[n] = data[i].array[posMin];
+                data[i].array[posMin] = temp;
+            }
+        }
+    }
+
+
+    //Fine ciclo
+    for (int j = 0; j < numEntries; j++) {
+        for (int i = 0; i < data[j].lenght; i++) {
+            printf("%d ", data[j].array[i]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
