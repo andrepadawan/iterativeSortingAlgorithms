@@ -90,21 +90,30 @@ void selectionSort(entry_t *data, int numEntries) {
         int posMin;
         int temp;
 
+        //Qui scanno l'intero array da 0 a N-1
         for (int n = 0; n < data[i].lenght; n++) {
-            posMin = n; //Il primo elemento viene settato come minimo, a prescindere
+            posMin = n; //Il primo elemento viene settato come minimo, per procedura
 
             for (int j = (n + 1); j < data[i].lenght; ++j) {
+                //Cioé scanno il right subarray (non ordinato)
+
                 if (data[i].array[j] < data[i].array[posMin]) {
-                    //Ho trovato un nuovo minimo
+                    //Ho trovato un nuovo minimo nel right subarray
                     posMin = j;
+                    //quindi scambio gli indici
                 }
             }
-            if (posMin != n) { //li scambio
+            //finito di scannare il right subarray nella sua interezza
+
+            if (posMin != n) { //li scambio se gli indici non combaciano
+                //Cioé, ho trovato un nuovo minimo che non era in posizione posMin
+
                 temp = data[i].array[n];
                 data[i].array[n] = data[i].array[posMin];
                 data[i].array[posMin] = temp;
             }
         }
+        //finito di scannare tutti gli array
     }
 
 
