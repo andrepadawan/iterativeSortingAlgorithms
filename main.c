@@ -42,7 +42,7 @@ FILE *fp_read;
 void readFile(entry_t data[], int numEntries);
 void selectionSort(entry_t *data, int numberOfEntries);
 void insertionSort(entry_t *data, int numberOfEntries);
-void shellSort();
+void shellSort(entry_t *data, int numberOfEntries);
 
 int main() {
     fp_read = fopen(filepos, "r");
@@ -64,7 +64,7 @@ int main() {
     }
 
     //selectionSort(data, numberOfEntries);
-    insertionSort(data, numberOfEntries);
+    //insertionSort(data, numberOfEntries);
     shellSort(data, numberOfEntries);
 
 }
@@ -168,6 +168,36 @@ void insertionSort(entry_t *data, int numberOfEntries){
 void shellSort(entry_t *data, int numberOfEntries){
     /*
      * Questo è shell sort, cominciamo
-     *
+     * é un insertion sort che però confronta elementi anche lontani, distanti h. h decresce fino a diventare 1 (quindi
+     * scambi tra celle adiacenti). H si può scegliere in base a diverse sequenze: verrà usato Knuth.
      * */
+    for(int entry = 0; entry < numberOfEntries; entry++) {
+        int i, j, x, h = 1, l=0, r = data[entry].lenght -1;
+
+        while (h <= data[entry].lenght) {
+            h = 3*h - 1; //Sequenza di knuth
+        }
+
+        while(h>=1){ //condizione per la quale eseguo i confronti.
+            for(i = l+h; i <= r; i++){
+                j = i; x = data[entry].array[i];
+
+                while (j >= l + h && x < data[entry].array[j-h]){
+                    data[entry].array[j] = data[entry].array[j-h];
+                    j -= h;
+                }
+
+                data[entry].array[j] = x;
+
+            }
+            h = h/3;
+        }
+    }
+    for (int j = 0; j < numberOfEntries; j++) {
+        for (int i = 0; i < data[j].lenght; i++) {
+            printf("%d ", data[j].array[i]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
