@@ -41,7 +41,7 @@ FILE *fp_read;
 
 void readFile(entry_t data[], int numEntries);
 void selectionSort(entry_t *data, int numberOfEntries);
-void insertionSort();
+void insertionSort(entry_t *data, int numberOfEntries);
 void shellSort();
 
 int main() {
@@ -63,7 +63,9 @@ int main() {
         printf("\n");
     }
 
-    selectionSort(data, numberOfEntries);
+    //selectionSort(data, numberOfEntries);
+    insertionSort(data, numberOfEntries);
+    shellSort(data, numberOfEntries);
 
 }
 
@@ -80,15 +82,14 @@ void readFile(entry_t data[], int numberOfEntries) {
 
 void selectionSort(entry_t *data, int numEntries) {
     /*RIPASSINO
-     * Il selection sort è un algoritmo in-place.
+     * Il selection sort è un algoritmo in-place: solo array e la variabile temp sono usati.
      * Ad ogni iterazione, prende il valore minore della sequenza non ordinata e lo sposta nella sequenza ordinata.
      * All'inizio la sequenza non ordinata ha lunghezza N-1; l'altra 0.
      * Poi, una decrementa unitamente all'altra che incrementa (sempre di uno)
      * */
     printf("Selection sort:\n");
     for (int i = 0; i < numEntries; i++) {//Cioé applico l'algoritmo per ogni array nel file
-        int posMin;
-        int temp;
+        int posMin, temp, swaps = 0, comparisons = 0;
 
         //Qui scanno l'intero array da 0 a N-1
         for (int n = 0; n < data[i].lenght; n++) {
@@ -98,6 +99,7 @@ void selectionSort(entry_t *data, int numEntries) {
                 //Cioé scanno il right subarray (non ordinato)
 
                 if (data[i].array[j] < data[i].array[posMin]) {
+                    comparisons++;
                     //Ho trovato un nuovo minimo nel right subarray
                     posMin = j;
                     //quindi scambio gli indici
@@ -107,12 +109,13 @@ void selectionSort(entry_t *data, int numEntries) {
 
             if (posMin != n) { //li scambio se gli indici non combaciano
                 //Cioé, ho trovato un nuovo minimo che non era in posizione posMin
-
+                swaps++;
                 temp = data[i].array[n];
                 data[i].array[n] = data[i].array[posMin];
                 data[i].array[posMin] = temp;
             }
         }
+        printf("Number of comparisons (%d) and swaps (%d)\n", comparisons, swaps);
         //finito di scannare tutti gli array
     }
 
@@ -125,4 +128,46 @@ void selectionSort(entry_t *data, int numEntries) {
         printf("\n");
     }
     printf("\n");
+}
+
+void insertionSort(entry_t *data, int numberOfEntries){
+    /*
+     * In place and stable.
+     * Idealmente l'array ha due sottosequenze: l e r, da 1 e N-1 elementi rispettivamente.
+     * (L'array da un elemento è ordinato per definizione mentre si scorre, si inserisce
+     * l'elemento dall'array non ordinato in quello ordinato, mantenendo invariata questa proprietà
+     * Il subarray di sinistra è scannato fino a quando non si trova un elemento per cui Aj > ai, mentre
+     * il destro viene spostato di una posizione verso destra */
+
+    //Qui ciclo tra tutti i vettori del file
+    for(int entry = 0; entry<numberOfEntries; entry++){
+        //Inizializzo le variabili del caso
+        int pos, insertions = 0, comparisons = 0, valueToCompare;
+
+        for(int l = 1; l < data[entry].lenght; l++){
+            //Cioé, scorro sul vettore. All'inizio ho come array ordinato data[entry].array[i = 0] quindi parto da i = 1.
+            valueToCompare = data[entry].array[l];
+            pos = l - 1; //Sarebbe l'indice che scorre nel left-sub array
+
+            while(pos>=0&& valueToCompare < data[entry].array[pos]){
+                data[entry].array[pos+1] = data[entry].array[pos];
+                pos--;
+            }
+            data[entry].array[pos+1] = valueToCompare;
+        }
+    }
+    for (int j = 0; j < numberOfEntries; j++) {
+        for (int i = 0; i < data[j].lenght; i++) {
+            printf("%d ", data[j].array[i]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void shellSort(entry_t *data, int numberOfEntries){
+    /*
+     * Questo è shell sort, cominciamo
+     *
+     * */
 }
